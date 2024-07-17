@@ -3,7 +3,7 @@
 Smart Home Thermostat
 
 ## Project Overview
-This project was developed for the CS-499 Capstone class at UAB, where I was responsible for the front end. We were challenged to create a smart thermostat that could track user events throughout the day, such as opening doors, opening windows, running the washer or dryer, bathing, etc.
+This project was developed for the CS-499 Capstone class at UAB, where I was responsible for the front end. We were challenged to create a smart thermostat that could track user events throughout the day, such as opening doors, opening windows, running the washer or dryer, bathing, etc. (Wait a moment for the gifs to load)
 
 ![Thermostat Overview GIF](./public/images/initial.gif)
 
