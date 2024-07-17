@@ -1,9 +1,23 @@
-# thermostat
+
+# Thermostat
 Smart Home Thermostat
 
-To run this file, make sure you navigate to the 'front-end' folder
-Type 'npm install'
-Type 'npm start'
+## Project Overview
+This project was developed for the CS-499 Capstone class at UAB, where I was responsible for the front end. We were challenged to create a smart thermostat that could track user events throughout the day, such as opening doors, opening windows, running the washer or dryer, bathing, etc.
 
-It should automatically open the project in chrome or whatever browser you have as default.
-Note that you will need node.js installed or it won't run!!!
+## Interactive Floorplan Feature
+While most teams decided to create a functional website meeting the project requirements, I aimed to add additional UI elements to make the project more expressive. Consequently, my team opted for an interactive floorplan of the house. This floorplan not only showed the layout but also highlighted appliances and other functions (e.g., doors opening, windows opening) when they occurred. Movement or flashing lights indicated when an appliance was being used, providing a more dynamic user experience.
+
+## Current Status and Future Plans
+I have presented the frontend here, as our backend was not fully functioning. However, in my personal time, I plan to build it out so this will become a fully functioning project.
+
+## Running the Project
+To run this project, follow these steps:
+1. Install dependencies:
+    ```sh
+    npm install
+    ```
+2. Start the project:
+    ```sh
+    npm start
+    ```
