@@ -13,7 +13,7 @@ While most teams decided to create a functional website meeting the project requ
 ![Thermostat Interactive GIF](./public/images/interactive.gif)
 
 ## Chart and Forecast
-Another feature of our smart thermostat was the ability to chart usage and future weather forecasts.
+Another feature of our smart thermostat was the ability to chart usage and recieve weather forecasts.
 
 ![Thermostat Slider GIF](./public/images/slider.gif)
 
