@@ -18,9 +18,9 @@ const DesiredTemp = (props) => {
         <div id="tempsCollection">
             <DecreaseTempButton handleDecreaseTempClick={handleDecreaseTempClick}/>
             <div id="currentTemp" className='temps'>
-            <p className='title'>Current</p>
+            <p className='title'>Desired</p>
             <p className='title'>Temperature</p>
-            <p className='temperatures'>{desiredTemp} &deg;F</p>
+            <p className='temperatures' >{desiredTemp} &deg;F</p>
             </div>
             <IncreaseTempButton handleIncreaseTempClick={handleIncreaseTempClick}/>
         </div>

@@ -1,0 +1,1992 @@
+:root{
+  --background: #EBF1F4;
+  --text-primary: #000;
+  --gradient-color-one: rgba(161, 1, 93, 1);
+  --gradient-color-two: rgba(42, 0, 213, 1);
+  --box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  --opacity: 0.7;
+  --blue: 0;
+}
+
+[data-theme='dark']{
+  --background: #242424;
+  --text-primary: #2F3B52;
+  --gradient-color-one: rgba(161, 1, 93, .5);
+  --gradient-color-two: rgba(42, 0, 213, .5);
+  --box-shadow: rgba(255, 255, 255, 0.1) 0px 19px 38px, rgba(255, 255, 255, 0.07) 0px 15px 12px;
+  --opacity: 0.7;
+  --blue: 1em;
+}
+
+@font-face {
+  font-family: digital;
+  src: url('../public/digitalism.ttf') format('truetype');
+}
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  /* min-height: 100vh; */
+  display: grid;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.app{
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+#main{
+  position: relative;
+  transform-style: preserve-3d;
+  transform: perspective(5000px) rotateY(var(--rotateY)) rotateX(var(--rotateX));
+  width: 70%;
+  margin: auto;
+}
+
+.darkModeDiv{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 4em;
+}
+
+#carouselProvider {
+  display: 'flex';
+  background: '#292d32';
+
+}
+
+#main::before,
+#main::after{
+  content: "";
+  position: absolute;
+  border-radius: inherit;
+}
+
+#main::before{
+  inset: 0.75rem;
+  background: black;
+  transform: translateZ(-49px);
+  /* filter: blur(3em); */
+  opacity: var(--opacity);
+}
+
+#main::after{
+  inset: -1.2rem;
+  background: conic-gradient( 
+    from var(--gradient-angle), 
+    var(--gradient-color-one), 
+    var(--gradient-color-two), 
+    var(--gradient-color-one), 
+    var(--gradient-color-two), 
+    var(--gradient-color-one));
+  transform: translateZ(-50px);
+  border-radius: 10px;
+  box-shadow: var(--box-shadow);
+  animation: colorRotate 7.5s infinite linear;
+}
+
+@keyframes colorRotate {
+  0% { --gradient-angle: 0deg; }
+  100% { --gradient-angle: 360deg; }
+}
+
+#tooltip{
+  margin-bottom: 3em;
+}
+.carousel{
+
+  backdrop-filter: blur(6px) saturate(200%);
+  -webkit-backdrop-filter: blur(6px) saturate(200%);
+  background-color: rgba(255, 255, 255, 0.56);
+}
+
+#svg{
+  margin: 0.3em;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+#button1, #button2{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+#tempsCollection, #costsCollection{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
+}
+.temps, .costs{
+  flex: 1;
+  text-align: center;
+  margin: 0.3em;
+  display: inline;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+.title{
+  font-family: system-ui;
+  margin: 0;
+  color: var(--text-primary);
+}
+.temperatures, .amounts{
+  font-family: digital;
+  font-size: 3em;
+  margin: 0;
+  color: var(--text-primary);
+}
+.amounts{
+  margin: .5em 0;
+}
+.tempButtons{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: box-shadow 0.1s ease;
+  color: var(--text-primary);
+}
+
+.tempButtons.clicked {
+  box-shadow: none;
+}
+
+.tempButtons.unclicked{
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+#chart{
+  margin: 0.3em;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+
+#frontdoor,
+#backdoor,
+#masterBedRoomDoor,
+#bedRoom1Door,
+#bedRoom2Door,
+#bathRoom1Door,
+#laundryKitchenDoor,
+#laundryGarageDoor,
+#garageDoor1,
+#garageDoor2,
+#bathRoom1CeilingLight,
+#bedRoom1CeilingLight,
+#bedRoom2CeilingLight,
+#kitchenCeilingLight,
+#livingRoomCeilingLight,
+#masterBathRoomCeilingLight,
+#masterBedRoomCeilingLight,
+#dishWasher,
+#bathRoom1Fan,
+#masterBathRoomFan,
+#bedRoom1Lamp1,
+#bedRoom1Lamp2,
+#bedRoom2Lamp1,
+#bedRoom2Lamp2,
+#livingRoomLamp1,
+#livingRoomLamp2,
+#masterBedRoomLamp1,
+#masterBedRoomLamp2,
+#dryer,
+#livingRoomTV,
+#masterBedRoomTV,
+#microwave,
+#stove,
+#bathRoom1Bath,
+#bathRoom1Sink,
+#bathRoom1Toilet,
+#kitchenSink,
+#masterBathRoomBath,
+#masterBathRoomSink,
+#masterBathRoomToilet,
+#washer,
+#bathRoom1Window,
+#bedRoom1Window1,
+#bedRoom1Window2,
+#bedRoom2Window1,
+#bedRoom2Window2,
+#kitchenWindow1,
+#kitchenWindow2,
+#livingRoomWindow1,
+#livingRoomWindow2,
+#livingRoomWindow3,
+#masterBathRoomWindow,
+#masterBedRoomWindow1,
+#masterBedRoomWindow2 {
+    cursor: pointer;
+}
+
+.frontDoorSwing {
+animation: frontDoorSwing 3000ms linear 1 normal forwards
+}
+
+@keyframes frontDoorSwing {
+0% {
+  transform: translate(504.033094px, 443.761001px) rotate(0deg)
+}
+
+16.666667% {
+  transform: translate(504.033094px, 443.761001px) rotate(90deg)
+}
+
+70% {
+  transform: translate(504.033094px, 443.761001px) rotate(90deg)
+}
+
+90% {
+  transform: translate(504.033094px, 443.761001px) rotate(0deg)
+}
+
+100% {
+  transform: translate(504.033094px, 443.761001px) rotate(0deg)
+}
+}
+
+.frontDoorFlash {
+animation: frontDoorFlash 3000ms linear 1 normal forwards
+}
+
+@keyframes frontDoorFlash {
+0% {
+  fill: #32323a
+}
+
+16.666667% {
+  fill: #32323a
+}
+
+23.333333% {
+  fill: #ba1c1c
+}
+
+30% {
+  fill: #32323a
+}
+
+36.666667% {
+  fill: #ba1c1c
+}
+
+43.333333% {
+  fill: #32323a
+}
+
+50% {
+  fill: #ba1c1c
+}
+
+56.666667% {
+  fill: #32323a
+}
+
+63.333333% {
+  fill: #ba1c1c
+}
+
+70% {
+  fill: #32323a
+}
+
+100% {
+  fill: #32323a
+}
+}
+
+.backDoorSwing {
+animation: backDoorSwing 3000ms linear 1 normal forwards
+}
+
+@keyframes backDoorSwing {
+0% {
+  transform: translate(442.619517px, 15.3833px) rotate(0deg)
+}
+
+16.666667% {
+  transform: translate(442.619517px, 15.3833px) rotate(90deg)
+}
+
+70% {
+  transform: translate(442.619517px, 15.3833px) rotate(90deg)
+}
+
+90% {
+  transform: translate(442.619517px, 15.3833px) rotate(0deg)
+}
+
+100% {
+  transform: translate(442.619517px, 15.3833px) rotate(0deg)
+}
+}
+
+.backDoorFlash {
+animation: backDoorFlash 3000ms linear 1 normal forwards
+}
+
+@keyframes backDoorFlash {
+0% {
+  fill: #32323a
+}
+
+16.666667% {
+  fill: #32323a
+}
+
+23.333333% {
+  fill: #ba1c1c
+}
+
+30% {
+  fill: #32323a
+}
+
+36.666667% {
+  fill: #ba1c1c
+}
+
+43.333333% {
+  fill: #32323a
+}
+
+50% {
+  fill: #ba1c1c
+}
+
+56.666667% {
+  fill: #32323a
+}
+
+63.333333% {
+  fill: #ba1c1c
+}
+
+70% {
+  fill: #32323a
+}
+
+100% {
+  fill: #32323a
+}
+}
+
+.laundryGarageDoorSwing {
+animation: laundryGarageDoorSwing 3000ms linear 1 normal forwards
+}
+
+@keyframes laundryGarageDoorSwing {
+0% {
+  transform: translate(750.619517px, 128.3833px) rotate(90deg)
+}
+
+16.666667% {
+  transform: translate(750.619517px, 128.3833px) rotate(0deg)
+}
+
+70% {
+  transform: translate(750.619517px, 128.3833px) rotate(0deg)
+}
+
+90% {
+  transform: translate(750.619517px, 128.3833px) rotate(90deg)
+}
+
+100% {
+  transform: translate(750.619517px, 128.3833px) rotate(90deg)
+}
+}
+
+.laundryGarageDoorFlash {
+animation: laundryGarageDoorFlash 3000ms linear 1 normal forwards
+}
+
+@keyframes laundryGarageDoorFlash {
+0% {
+  fill: #32323a
+}
+
+16.666667% {
+  fill: #32323a
+}
+
+23.333333% {
+  fill: #ba1c1c
+}
+
+30% {
+  fill: #32323a
+}
+
+36.666667% {
+  fill: #ba1c1c
+}
+
+43.333333% {
+  fill: #32323a
+}
+
+50% {
+  fill: #ba1c1c
+}
+
+56.666667% {
+  fill: #32323a
+}
+
+63.333333% {
+  fill: #ba1c1c
+}
+
+70% {
+  fill: #32323a
+}
+
+100% {
+  fill: #32323a
+}
+}
+
+.laundryKitchenDoor {
+animation: laundryKitchenDoorSwing 3000ms linear 1 normal forwards
+}
+
+@keyframes laundryKitchenDoorSwing {
+0% {
+  transform: translate(501.619517px, 129.3833px) rotate(90deg)
+}
+
+16.666667% {
+  transform: translate(501.619517px, 129.3833px) rotate(180deg)
+}
+
+50% {
+  transform: translate(501.619517px, 129.3833px) rotate(180deg)
+}
+
+66.666667% {
+  transform: translate(501.619517px, 129.3833px) rotate(90deg)
+}
+
+100% {
+  transform: translate(501.619517px, 129.3833px) rotate(90deg)
+}
+}
+
+.masterBedRoomDoor {
+animation: masterBedRoomSwing 3000ms linear 1 normal forwards
+}
+
+@keyframes masterBedRoomSwing {
+0% {
+  transform: translate(529.824957px, 264.178104px) rotate(0deg)
+}
+
+16.666667% {
+  transform: translate(529.824957px, 264.178104px) rotate(90deg)
+}
+
+50% {
+  transform: translate(529.824957px, 264.178104px) rotate(90deg)
+}
+
+66.666667% {
+  transform: translate(529.824957px, 264.178104px) rotate(0deg)
+}
+
+100% {
+  transform: translate(529.824957px, 264.178104px) rotate(0deg)
+}
+}
+
+.bedRoom1Door {
+animation: bedRoom1Swing 3000ms linear 1 normal forwards
+}
+
+@keyframes bedRoom1Swing {
+0% {
+  transform: translate(192.824957px, 184.178104px) rotate(0deg)
+}
+
+16.666667% {
+  transform: translate(192.824957px, 184.178104px) rotate(90deg)
+}
+
+50% {
+  transform: translate(192.824957px, 184.178104px) rotate(90deg)
+}
+
+66.666667% {
+  transform: translate(192.824957px, 184.178104px) rotate(0deg)
+}
+
+100% {
+  transform: translate(192.824957px, 184.178104px) rotate(0deg)
+}
+}
+
+.bedRoom2Door {
+animation: bedRoom2DoorSwing 3000ms linear 1 normal forwards
+}
+
+@keyframes bedRoom2DoorSwing {
+0% {
+  transform: translate(192.824957px, 281.178104px) rotate(0deg)
+}
+
+16.666667% {
+  transform: translate(192.824957px, 281.178104px) rotate(-90deg)
+}
+
+50% {
+  transform: translate(192.824957px, 281.178104px) rotate(-90deg)
+}
+
+66.666667% {
+  transform: translate(192.824957px, 281.178104px) rotate(0deg)
+}
+
+100% {
+  transform: translate(192.824957px, 281.178104px) rotate(0deg)
+}
+}
+
+.bathRoom1Door {
+animation: bathroom1DoorSwing 3000ms linear 1 normal forwards
+}
+
+@keyframes bathroom1DoorSwing {
+0% {
+  transform: translate(141.824957px, 257.178104px) rotate(90deg)
+}
+
+16.666667% {
+  transform: translate(141.824957px, 257.178104px) rotate(0deg)
+}
+
+50% {
+  transform: translate(141.824957px, 257.178104px) rotate(0deg)
+}
+
+66.666667% {
+  transform: translate(141.824957px, 257.178104px) rotate(90deg)
+}
+
+100% {
+  transform: translate(141.824957px, 257.178104px) rotate(90deg)
+}
+}
+/* dishwasher */
+.dishWasherScale {
+animation: dishWasherScale 3000ms linear 1 normal forwards
+}
+
+@keyframes dishWasherScale {
+0% {
+  transform: translate(602.424011px, 337.589508px) scale(1, 1)
+}
+
+16.666667% {
+  transform: translate(602.424011px, 337.589508px) scale(1.2, 1.2)
+}
+
+70% {
+  transform: translate(602.424011px, 337.589508px) scale(1.2, 1.2)
+}
+
+90% {
+  transform: translate(602.424011px, 337.589508px) scale(1, 1)
+}
+
+100% {
+  transform: translate(602.424011px, 337.589508px) scale(1, 1)
+}
+}
+
+.dishWasherFlash {
+animation-name: dishWasherFillFlash, dishWasherStrokeFlash;
+animation-duration: 3000ms;
+animation-fill-mode: forwards;
+animation-timing-function: linear;
+animation-direction: normal;
+animation-iteration-count: 1;
+}
+
+@keyframes dishWasherFillFlash {
+0% {
+  fill: #fff
+}
+
+16.666667% {
+  fill: #1923f6
+}
+
+23.333333% {
+  fill: #fff
+}
+
+30% {
+  fill: #1923f6
+}
+
+36.666667% {
+  fill: #fff
+}
+
+43.333333% {
+  fill: #1923f6
+}
+
+50% {
+  fill: #fff
+}
+
+56.666667% {
+  fill: #1923f6
+}
+
+63.333333% {
+  fill: #fff
+}
+
+70% {
+  fill: #1923f6
+}
+
+90% {
+  fill: #fff
+}
+
+100% {
+  fill: #fff
+}
+}
+
+@keyframes dishWasherStrokeFlash {
+0% {
+  stroke: #000
+}
+
+16.666667% {
+  stroke: #ba1c1c
+}
+
+23.333333% {
+  stroke: #000
+}
+
+30% {
+  stroke: #ba1c1c
+}
+
+36.666667% {
+  stroke: #000
+}
+
+43.333333% {
+  stroke: #ba1c1c
+}
+
+50% {
+  stroke: #000
+}
+
+56.666667% {
+  stroke: #ba1c1c
+}
+
+63.333333% {
+  stroke: #000
+}
+
+70% {
+  stroke: #ba1c1c
+}
+
+90% {
+  stroke: #000
+}
+
+100% {
+  stroke: #000
+}
+}
+/* sink */
+#svgfinal-s-ellipse8_ts {
+animation: svgfinal-s-ellipse8_ts__ts 3000ms linear 1 normal forwards
+}
+
+@keyframes svgfinal-s-ellipse8_ts__ts {
+0% {
+  transform: translate(39.436001px, 563.711945px) scale(1, 1)
+}
+
+16.666667% {
+  transform: translate(39.436001px, 563.711945px) scale(1.2, 1.2)
+}
+
+70% {
+  transform: translate(39.436001px, 563.711945px) scale(1.2, 1.2)
+}
+
+90% {
+  transform: translate(39.436001px, 563.711945px) scale(1, 1)
+}
+
+100% {
+  transform: translate(39.436001px, 563.711945px) scale(1, 1)
+}
+}
+
+#svgfinal-s-ellipse8 {
+animation-name: svgfinal-s-ellipse8_f_p, svgfinal-s-ellipse8_s_p;
+animation-duration: 3000ms;
+animation-fill-mode: forwards;
+animation-timing-function: linear;
+animation-direction: normal;
+animation-iteration-count: 1;
+}
+
+@keyframes svgfinal-s-ellipse8_f_p {
+0% {
+  fill: #fff
+}
+
+16.666667% {
+  fill: #1923f6
+}
+
+23.333333% {
+  fill: #fff
+}
+
+30% {
+  fill: #1923f6
+}
+
+36.666667% {
+  fill: #fff
+}
+
+43.333333% {
+  fill: #1923f6
+}
+
+50% {
+  fill: #fff
+}
+
+56.666667% {
+  fill: #1923f6
+}
+
+63.333333% {
+  fill: #fff
+}
+
+70% {
+  fill: #1923f6
+}
+
+90% {
+  fill: #fff
+}
+
+100% {
+  fill: #fff
+}
+}
+
+@keyframes svgfinal-s-ellipse8_s_p {
+0% {
+  stroke: #000
+}
+
+16.666667% {
+  stroke: #ba1c1c
+}
+
+23.333333% {
+  stroke: #000
+}
+
+30% {
+  stroke: #ba1c1c
+}
+
+36.666667% {
+  stroke: #000
+}
+
+43.333333% {
+  stroke: #ba1c1c
+}
+
+50% {
+  stroke: #000
+}
+
+56.666667% {
+  stroke: #ba1c1c
+}
+
+63.333333% {
+  stroke: #000
+}
+
+70% {
+  stroke: #ba1c1c
+}
+
+90% {
+  stroke: #000
+}
+
+100% {
+  stroke: #000
+}
+}
+/* Bedroom windows */
+.window {
+animation: windowFlash 3000ms linear 1 normal forwards
+}
+
+@keyframes windowFlash {
+0% {
+  fill: #cde0f5
+}
+
+16.666667% {
+  fill: #cde0f5
+}
+
+23.333333% {
+  fill: #ba1c1c
+}
+
+30% {
+  fill: #cde0f5
+}
+
+36.666667% {
+  fill: #ba1c1c
+}
+
+43.333333% {
+  fill: #cde0f5
+}
+
+50% {
+  fill: #ba1c1c
+}
+
+56.666667% {
+  fill: #cde0f5
+}
+
+63.333333% {
+  fill: #ba1c1c
+}
+
+90% {
+  fill: #cde0f5
+}
+
+100% {
+  fill: #cde0f5
+}
+}
+
+.microwaveScale {
+animation: microwave 3000ms linear 1 normal forwards
+}
+
+@keyframes microwave {
+0% {
+  transform: translate(386.484009px, 261.560989px) scale(1, 1)
+}
+
+16.666667% {
+  transform: translate(386.484009px, 261.560989px) scale(1.2, 1.2)
+}
+
+70% {
+  transform: translate(386.484009px, 261.560989px) scale(1.2, 1.2)
+}
+
+90% {
+  transform: translate(386.484009px, 261.560989px) scale(1, 1)
+}
+
+100% {
+  transform: translate(386.484009px, 261.560989px) scale(1, 1)
+}
+}
+
+.microwaveFlash {
+animation-name: microwaveFillFlash, microwaveStrokeFlash;
+animation-duration: 3000ms;
+animation-fill-mode: forwards;
+animation-timing-function: linear;
+animation-direction: normal;
+animation-iteration-count: 1;
+}
+
+@keyframes microwaveFillFlash {
+0% {
+  fill: #fff
+}
+
+16.666667% {
+  fill: #fff
+}
+
+23.333333% {
+  fill: #ba1c1c
+}
+
+30% {
+  fill: #fff
+}
+
+36.666667% {
+  fill: #ba1c1c
+}
+
+43.333333% {
+  fill: #fff
+}
+
+50% {
+  fill: #ba1c1c
+}
+
+56.666667% {
+  fill: #fff
+}
+
+63.333333% {
+  fill: #ba1c1c
+}
+
+70% {
+  fill: #fff
+}
+
+100% {
+  fill: #fff
+}
+}
+
+@keyframes microwaveStrokeFlash {
+0% {
+  stroke: #000
+}
+
+16.666667% {
+  stroke: #ba1c1c
+}
+
+23.333333% {
+  stroke: #000
+}
+
+30% {
+  stroke: #ba1c1c
+}
+
+36.666667% {
+  stroke: #000
+}
+
+43.333333% {
+  stroke: #ba1c1c
+}
+
+50% {
+  stroke: #000
+}
+
+56.666667% {
+  stroke: #ba1c1c
+}
+
+63.333333% {
+  stroke: #000
+}
+
+70% {
+  stroke: #ba1c1c
+}
+
+90% {
+  stroke: #000
+}
+
+100% {
+  stroke: #000
+}
+}
+
+.bathroomCeilingLightScale {
+animation: bathroomCeilingLightScale 3000ms linear 1 normal forwards
+}
+
+@keyframes bathroomCeilingLightScale {
+0% {
+  transform: translate(323.252991px, 253.997009px) scale(1, 1)
+}
+
+16.666667% {
+  transform: translate(323.252991px, 253.997009px) scale(2, 2)
+}
+
+70% {
+  transform: translate(323.252991px, 253.997009px) scale(2, 2)
+}
+
+90% {
+  transform: translate(323.252991px, 253.997009px) scale(1, 1)
+}
+
+100% {
+  transform: translate(323.252991px, 253.997009px) scale(1, 1)
+}
+}
+
+.bathroomCeilingLightFlash {
+animation-name: bathroomCeilingLightFillFlash, bathroomCeilingLightStrokeFlash;
+animation-duration: 3000ms;
+animation-fill-mode: forwards;
+animation-timing-function: linear;
+animation-direction: normal;
+animation-iteration-count: 1;
+}
+
+@keyframes bathroomCeilingLightFillFlash {
+0% {
+  fill: #fff
+}
+
+16.666667% {
+  fill: #ecf872
+}
+
+23.333333% {
+  fill: #fff
+}
+
+30% {
+  fill: #ecf872
+}
+
+36.666667% {
+  fill: #fff
+}
+
+43.333333% {
+  fill: #ecf872
+}
+
+50% {
+  fill: #fff
+}
+
+56.666667% {
+  fill: #ecf872
+}
+
+63.333333% {
+  fill: #fff
+}
+
+70% {
+  fill: #ecf872
+}
+
+90% {
+  fill: #fff
+}
+
+100% {
+  fill: #fff
+}
+}
+
+@keyframes bathroomCeilingLightStrokeFlash {
+0% {
+  stroke: #000
+}
+
+16.666667% {
+  stroke: #ba1c1c
+}
+
+23.333333% {
+  stroke: #000
+}
+
+30% {
+  stroke: #ba1c1c
+}
+
+36.666667% {
+  stroke: #000
+}
+
+43.333333% {
+  stroke: #ba1c1c
+}
+
+50% {
+  stroke: #000
+}
+
+56.666667% {
+  stroke: #ba1c1c
+}
+
+63.333333% {
+  stroke: #000
+}
+
+70% {
+  stroke: #ba1c1c
+}
+
+90% {
+  stroke: #000
+}
+
+100% {
+  stroke: #000
+}
+}
+
+.bathRoom1CeilingFanScale {
+  animation: bathRoom1CeilingFanScale 3000ms linear 1 normal forwards
+}
+
+@keyframes bathRoom1CeilingFanScale {
+  0% {
+    transform: translate(365.609009px, 263.625px) scale(1, 1)
+  }
+
+  16.666667% {
+    transform: translate(365.609009px, 263.625px) scale(1.5, 1.5)
+  }
+
+  70% {
+    transform: translate(365.609009px, 263.625px) scale(1.5, 1.5)
+  }
+
+  90% {
+    transform: translate(365.609009px, 263.625px) scale(1, 1)
+  }
+
+  100% {
+    transform: translate(365.609009px, 263.625px) scale(1, 1)
+  }
+}
+
+.bathRoom1CeilingFanFlash {
+  animation-name: bathRoom1CeilingFanFillFlash, bathRoom1CeilingFanStrokeFlash;
+  animation-duration: 3000ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+}
+
+@keyframes bathRoom1CeilingFanFillFlash {
+  0% {
+    fill: #fff
+  }
+
+  16.666667% {
+    fill: #ecf872
+  }
+
+  23.333333% {
+    fill: #fff
+  }
+
+  30% {
+    fill: #ecf872
+  }
+
+  36.666667% {
+    fill: #fff
+  }
+
+  43.333333% {
+    fill: #ecf872
+  }
+
+  50% {
+    fill: #fff
+  }
+
+  56.666667% {
+    fill: #ecf872
+  }
+
+  63.333333% {
+    fill: #fff
+  }
+
+  70% {
+    fill: #ecf872
+  }
+
+  90% {
+    fill: #fff
+  }
+
+  100% {
+    fill: #fff
+  }
+}
+
+@keyframes bathRoom1CeilingFanStrokeFlash {
+  0% {
+    stroke: #000
+  }
+
+  16.666667% {
+    stroke: #ba1c1c
+  }
+
+  23.333333% {
+    stroke: #000
+  }
+
+  30% {
+    stroke: #ba1c1c
+  }
+
+  36.666667% {
+    stroke: #000
+  }
+
+  43.333333% {
+    stroke: #ba1c1c
+  }
+
+  50% {
+    stroke: #000
+  }
+
+  56.666667% {
+    stroke: #ba1c1c
+  }
+
+  63.333333% {
+    stroke: #000
+  }
+
+  70% {
+    stroke: #ba1c1c
+  }
+
+  90% {
+    stroke: #000
+  }
+
+  100% {
+    stroke: #000
+  }
+}
+
+
+.ceilingLightScale {
+animation: ceilingLightScale 3000ms linear 1 normal forwards
+}
+
+@keyframes ceilingLightScale {
+0% {
+  transform: translate(323.252991px, 253.997009px) scale(1, 1)
+}
+
+16.666667% {
+  transform: translate(323.252991px, 253.997009px) scale(2, 2)
+}
+
+70% {
+  transform: translate(323.252991px, 253.997009px) scale(2, 2)
+}
+
+90% {
+  transform: translate(323.252991px, 253.997009px) scale(1, 1)
+}
+
+100% {
+  transform: translate(323.252991px, 253.997009px) scale(1, 1)
+}
+}
+
+.ceilingLightFlash {
+animation-name: ceilingFillFlash, ceilingStrokeFlash;
+animation-duration: 3000ms;
+animation-fill-mode: forwards;
+animation-timing-function: linear;
+animation-direction: normal;
+animation-iteration-count: 1;
+}
+
+@keyframes ceilingFillFlash {
+0% {
+  fill: #fff
+}
+
+16.666667% {
+  fill: #ecf872
+}
+
+23.333333% {
+  fill: #fff
+}
+
+30% {
+  fill: #ecf872
+}
+
+36.666667% {
+  fill: #fff
+}
+
+43.333333% {
+  fill: #ecf872
+}
+
+50% {
+  fill: #fff
+}
+
+56.666667% {
+  fill: #ecf872
+}
+
+63.333333% {
+  fill: #fff
+}
+
+70% {
+  fill: #ecf872
+}
+
+90% {
+  fill: #fff
+}
+
+100% {
+  fill: #fff
+}
+}
+
+@keyframes ceilingStrokeFlash {
+0% {
+  stroke: #000
+}
+
+16.666667% {
+  stroke: #ba1c1c
+}
+
+23.333333% {
+  stroke: #000
+}
+
+30% {
+  stroke: #ba1c1c
+}
+
+36.666667% {
+  stroke: #000
+}
+
+43.333333% {
+  stroke: #ba1c1c
+}
+
+50% {
+  stroke: #000
+}
+
+56.666667% {
+  stroke: #ba1c1c
+}
+
+63.333333% {
+  stroke: #000
+}
+
+70% {
+  stroke: #ba1c1c
+}
+
+90% {
+  stroke: #000
+}
+
+100% {
+  stroke: #000
+}
+}
+
+.garageDoorScale {
+animation: garageDoorScale 3000ms linear 1 normal forwards
+}
+
+@keyframes garageDoorScale {
+0% {
+  transform: translate(835.666992px, 274.5px) scale(1, 1)
+}
+
+16.666667% {
+  transform: translate(835.666992px, 274.5px) scale(1.2, 1.2)
+}
+
+70% {
+  transform: translate(835.666992px, 274.5px) scale(1.2, 1.2)
+}
+
+90% {
+  transform: translate(835.666992px, 274.5px) scale(1, 1)
+}
+
+100% {
+  transform: translate(835.666992px, 274.5px) scale(1, 1)
+}
+}
+
+.garageDoorFlash {
+animation-name: garageDoorFillFlash, garageDoorStrokeFlash;
+animation-duration: 3000ms;
+animation-fill-mode: forwards;
+animation-timing-function: linear;
+animation-direction: normal;
+animation-iteration-count: 1;
+}
+
+@keyframes garageDoorFillFlash {
+0% {
+  fill: #fff
+}
+
+16.666667% {
+  fill: #fff
+}
+
+23.333333% {
+  fill: #ba1c1c
+}
+
+30% {
+  fill: #fff
+}
+
+36.666667% {
+  fill: #ba1c1c
+}
+
+43.333333% {
+  fill: #fff
+}
+
+50% {
+  fill: #ba1c1c
+}
+
+56.666667% {
+  fill: #fff
+}
+
+63.333333% {
+  fill: #ba1c1c
+}
+
+70% {
+  fill: #fff
+}
+
+100% {
+  fill: #fff
+}
+}
+
+@keyframes garageDoorStrokeFlash {
+  0% {
+    stroke: #000
+  }
+
+  16.666667% {
+    stroke: #ba1c1c
+  }
+
+  23.333333% {
+    stroke: #000
+  }
+
+  30% {
+    stroke: #ba1c1c
+  }
+
+  36.666667% {
+    stroke: #000
+  }
+
+  43.333333% {
+    stroke: #ba1c1c
+  }
+
+  50% {
+    stroke: #000
+  }
+
+  56.666667% {
+    stroke: #ba1c1c
+  }
+
+  63.333333% {
+    stroke: #000
+  }
+
+  70% {
+    stroke: #ba1c1c
+  }
+
+  90% {
+    stroke: #000
+  }
+
+  100% {
+    stroke: #000
+  }
+}
+
+.lampScale {
+  animation: lampScale 3000ms linear 1 normal forwards
+}
+
+@keyframes lampScale {
+  0% {
+    transform: translate(429.729507px, 102.589996px) scale(1, 1)
+  }
+
+  16.666667% {
+    transform: translate(429.729507px, 102.589996px) scale(2, 2)
+  }
+
+  70% {
+    transform: translate(429.729507px, 102.589996px) scale(2, 2)
+  }
+
+  90% {
+    transform: translate(429.729507px, 102.589996px) scale(1, 1)
+  }
+
+  100% {
+    transform: translate(429.729507px, 102.589996px) scale(1, 1)
+  }
+}
+
+.lampFlash {
+  animation-name: lampFillFlash, lampStrokeFlash;
+  animation-duration: 3000ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+}
+
+@keyframes lampFillFlash {
+  0% {
+    fill: #fff
+  }
+
+  16.666667% {
+    fill: #ecf872
+  }
+
+  23.333333% {
+    fill: #fff
+  }
+
+  30% {
+    fill: #ecf872
+  }
+
+  36.666667% {
+    fill: #fff
+  }
+
+  43.333333% {
+    fill: #ecf872
+  }
+
+  50% {
+    fill: #fff
+  }
+
+  56.666667% {
+    fill: #ecf872
+  }
+
+  63.333333% {
+    fill: #fff
+  }
+
+  70% {
+    fill: #ecf872
+  }
+
+  90% {
+    fill: #fff
+  }
+
+  100% {
+    fill: #fff
+  }
+}
+
+@keyframes lampStrokeFlash {
+  0% {
+    stroke: #000
+  }
+
+  16.666667% {
+    stroke: #ba1c1c
+  }
+
+  23.333333% {
+    stroke: #000
+  }
+
+  30% {
+    stroke: #ba1c1c
+  }
+
+  36.666667% {
+    stroke: #000
+  }
+
+  43.333333% {
+    stroke: #ba1c1c
+  }
+
+  50% {
+    stroke: #000
+  }
+
+  56.666667% {
+    stroke: #ba1c1c
+  }
+
+  63.333333% {
+    stroke: #000
+  }
+
+  70% {
+    stroke: #ba1c1c
+  }
+
+  90% {
+    stroke: #000
+  }
+
+  100% {
+    stroke: #000
+  }
+}
+
+.kitchenSinkScale {
+  animation: kitchenSinkScale 3000ms linear 1 normal forwards
+}
+
+@keyframes kitchenSinkScale {
+  0% {
+    transform: translate(520.0905px, 306.7565px) scale(1, 1)
+  }
+
+  16.666667% {
+    transform: translate(520.0905px, 306.7565px) scale(1.2, 1.2)
+  }
+
+  70% {
+    transform: translate(520.0905px, 306.7565px) scale(1.2, 1.2)
+  }
+
+  90% {
+    transform: translate(520.0905px, 306.7565px) scale(1, 1)
+  }
+
+  100% {
+    transform: translate(520.0905px, 306.7565px) scale(1, 1)
+  }
+}
+
+.kitchenSinkFlash {
+  animation-name: kitchenSinkFillFlash, kitchenSinkStrokeFlash;
+  animation-duration: 3000ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+}
+
+@keyframes kitchenSinkFillFlash {
+  0% {
+    fill: #fff
+  }
+
+  16.666667% {
+    fill: #1923f6
+  }
+
+  23.333333% {
+    fill: #fff
+  }
+
+  30% {
+    fill: #1923f6
+  }
+
+  36.666667% {
+    fill: #fff
+  }
+
+  43.333333% {
+    fill: #1923f6
+  }
+
+  50% {
+    fill: #fff
+  }
+
+  56.666667% {
+    fill: #1923f6
+  }
+
+  63.333333% {
+    fill: #fff
+  }
+
+  70% {
+    fill: #1923f6
+  }
+
+  90% {
+    fill: #fff
+  }
+
+  100% {
+    fill: #fff
+  }
+}
+
+@keyframes kitchenSinkStrokeFlash {
+  0% {
+    stroke: #000
+  }
+
+  16.666667% {
+    stroke: #ba1c1c
+  }
+
+  23.333333% {
+    stroke: #000
+  }
+
+  30% {
+    stroke: #ba1c1c
+  }
+
+  36.666667% {
+    stroke: #000
+  }
+
+  43.333333% {
+    stroke: #ba1c1c
+  }
+
+  50% {
+    stroke: #000
+  }
+
+  56.666667% {
+    stroke: #ba1c1c
+  }
+
+  63.333333% {
+    stroke: #000
+  }
+
+  70% {
+    stroke: #ba1c1c
+  }
+
+  90% {
+    stroke: #000
+  }
+
+  100% {
+    stroke: #000
+  }
+}
+
+.bathRoomScale {
+  animation: bathRoomScale 3000ms linear 1 normal forwards
+}
+
+@keyframes bathRoomScale {
+  0% {
+    transform: translate(39.436001px, 563.711945px) scale(1, 1)
+  }
+
+  16.666667% {
+    transform: translate(39.436001px, 563.711945px) scale(1.2, 1.2)
+  }
+
+  70% {
+    transform: translate(39.436001px, 563.711945px) scale(1.2, 1.2)
+  }
+
+  90% {
+    transform: translate(39.436001px, 563.711945px) scale(1, 1)
+  }
+
+  100% {
+    transform: translate(39.436001px, 563.711945px) scale(1, 1)
+  }
+}
+
+.bathRoomFlash {
+  animation-name: bathRoomFillFlash, bathRoomStrokeFlash;
+  animation-duration: 3000ms;
+  animation-fill-mode: forwards;
+  animation-timing-function: linear;
+  animation-direction: normal;
+  animation-iteration-count: 1;
+}
+
+@keyframes bathRoomFillFlash {
+  0% {
+    fill: #fff
+  }
+
+  16.666667% {
+    fill: #1923f6
+  }
+
+  23.333333% {
+    fill: #fff
+  }
+
+  30% {
+    fill: #1923f6
+  }
+
+  36.666667% {
+    fill: #fff
+  }
+
+  43.333333% {
+    fill: #1923f6
+  }
+
+  50% {
+    fill: #fff
+  }
+
+  56.666667% {
+    fill: #1923f6
+  }
+
+  63.333333% {
+    fill: #fff
+  }
+
+  70% {
+    fill: #1923f6
+  }
+
+  90% {
+    fill: #fff
+  }
+
+  100% {
+    fill: #fff
+  }
+}
+
+@keyframes bathRoomStrokeFlash {
+  0% {
+    stroke: #000
+  }
+
+  16.666667% {
+    stroke: #ba1c1c
+  }
+
+  23.333333% {
+    stroke: #000
+  }
+
+  30% {
+    stroke: #ba1c1c
+  }
+
+  36.666667% {
+    stroke: #000
+  }
+
+  43.333333% {
+    stroke: #ba1c1c
+  }
+
+  50% {
+    stroke: #000
+  }
+
+  56.666667% {
+    stroke: #ba1c1c
+  }
+
+  63.333333% {
+    stroke: #000
+  }
+
+  70% {
+    stroke: #ba1c1c
+  }
+
+  90% {
+    stroke: #000
+  }
+
+  100% {
+    stroke: #000
+  }
+}
